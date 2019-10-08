@@ -132,7 +132,7 @@ module.exports = {
   |
   */
   csrf: {
-    enable: true,
+    enable: false, //TODO COLOCAR EM PRODUÇÃO TRUE
     methods: ['POST', 'PUT', 'DELETE'],
     filterUris: [],
     cookieOptions: {
