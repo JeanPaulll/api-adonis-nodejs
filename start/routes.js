@@ -16,4 +16,7 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.on('/').render('welcome')
+Route.on('/').render('welcome');
+// Route.get('posts', 'PostController.index').as('post.index');
+Route.resource('posts', 'PostController')
+    .apiOnly();
