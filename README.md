@@ -10,12 +10,11 @@
 [![npm](https://img.shields.io/npm/v/api-adonis-nodejs.svg)]()
 [![Website](https://img.shields.io/website-up-down-green-red/http/shields.io.svg?label=agenciacriamais)](http://www.agenciacriamais.com.br)
 
-> `api with adonis` Api feita com Adones NodeJS
-Ao escrever microsserviços ou se você é um fã do TDD, tudo se resume à confiança. A simplicidade do AdonisJs
+> `api with adonis` Api feita com Adones NodeJS, microsserviços e TDD.
 
 ## Ajude a melhorar
 
-Encontrou um bug ou um problema? [Open a new issue](https://github.com/JeanPaulll/bs-slide-angular-agenciacriamais/issues)  GitHub.
+Encontrou um bug ou um problema? [Open a new issue](https://github.com/JeanPaulll/api-adonis-nodejs/issues)  GitHub.
 
 
 ## Contribuindo para este projeto
