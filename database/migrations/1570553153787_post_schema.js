@@ -9,7 +9,7 @@ class PostSchema extends Schema {
       table.increments();
       table.string('titulo', 60).notNullable();
       table.text('descricao').notNullable();
-      table.timestamps()
+      table.timestamps();
     })
   }
 
