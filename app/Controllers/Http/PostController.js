@@ -20,10 +20,13 @@ class PostController {
      * @param {View} ctx.view
      */
     async index({request, response, view}) {
-        return response.status(200).send({data: "teste"});
-        // let {page} = request.all();
-        // page = page ? page : 1;
-        // return await Post.query().paginate(page ? page : 1, 3);
+        // return response.status(200).send({data: "teste"});
+
+
+
+        let {page} = request.all();
+        page = page ? page : 1;
+        return await Post.query().with('user').paginate(page ? page : 1, 3);
         // return response.status(200).send({data: data});
     }
 
@@ -35,9 +38,7 @@ class PostController {
      * @param {Request} ctx.request
      * @param {Response} ctx.response
      */
-    async store({request, response}) {
-
-        // Realiza a validação do post
+    async store({request, auth, response}) {
         const validation = await validate(request.all(), {
             titulo: 'required|min:3|max:255',
             descricao: 'required|min:3|max:255'
@@ -47,8 +48,9 @@ class PostController {
             return response.status(401).send({error: 'Não autorizado!'});
         }
 
-        const data = await Post.create(request.all());
-        return response.created(data);
+        const data = await auth.user.posts().create(request.all());
+        await data.load('user');
+        return response.json({data})
     }
 
     /**

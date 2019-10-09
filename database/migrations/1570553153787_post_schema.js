@@ -9,6 +9,8 @@ class PostSchema extends Schema {
       table.increments();
       table.string('titulo', 60).notNullable();
       table.text('descricao').notNullable();
+      table.integer('user_id').unsigned();
+      table.foreign('user_id').references('Users.id').onDelete('cascade');
       table.timestamps();
     })
   }

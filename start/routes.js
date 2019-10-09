@@ -15,10 +15,21 @@
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route');
-Route.on('/').render('welcome');
-Route.resource('posts', 'PostController')
-    .apiOnly();
 
-// Route.get('posts', 'PostController.index').as('post.index');
-// Route.post('posts', 'PostController.store');
-// Route.delete('posts/:id', 'PostController.destroy');
+Route.on('/').render('welcome');
+
+// Login e Cadastro
+Route.post('/registrar', 'AuthController.register');
+Route.post('/login', 'AuthController.login');
+
+Route.resource('posts', 'PostController')
+    .apiOnly()
+    .middleware('auth');
+
+// Route.group(() => {
+//     Route.get('', 'PostController.index').as('post.index');
+//     Route.post('', 'PostController.store');
+//     Route.delete('/:id', 'PostController.destroy');
+// }).prefix('posts');
+
+
