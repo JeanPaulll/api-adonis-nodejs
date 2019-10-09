@@ -20,9 +20,10 @@ class PostController {
      * @param {View} ctx.view
      */
     async index({request, response, view}) {
-        let {page} = request.all();
-        page = page ? page : 1;
-        return await Post.query().paginate(page ? page : 1, 3);
+        return response.status(200).send({data: "teste"});
+        // let {page} = request.all();
+        // page = page ? page : 1;
+        // return await Post.query().paginate(page ? page : 1, 3);
         // return response.status(200).send({data: data});
     }
 
