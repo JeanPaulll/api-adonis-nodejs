@@ -1,11 +1,10 @@
-'use strict'
+'use strict';
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
-
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 const Post = use('App/Models/Post');
-const { validateAll } = use('Validator')
+const {validate} = use('Validator');
 
 /**
  * Resourceful controller for interacting with posts
@@ -21,19 +20,10 @@ class PostController {
      * @param {View} ctx.view
      */
     async index({request, response, view}) {
-       return Post.all();
-    }
-
-    /**
-     * Render a form to be used for creating a new post.
-     * GET posts/create
-     *
-     * @param {object} ctx
-     * @param {Request} ctx.request
-     * @param {Response} ctx.response
-     * @param {View} ctx.view
-     */
-    async create({request, response, view}) {
+        let {page} = request.all();
+        page = page ? page : 1;
+        return await Post.query().paginate(page ? page : 1, 3);
+        // return response.status(200).send({data: data});
     }
 
     /**
@@ -45,11 +35,19 @@ class PostController {
      * @param {Response} ctx.response
      */
     async store({request, response}) {
-        const data = request.only(['titulo', 'descricao']);
-        await Post.create({
-            "titulo" : "Teste Titulo",
-            "descricao" : "Teste Descrição",
-        })
+
+        // Realiza a validação do post
+        const validation = await validate(request.all(), {
+            titulo: 'required|min:3|max:255',
+            descricao: 'required|min:3|max:255'
+        });
+
+        if (validation.fails()) {
+            return response.status(401).send({error: 'Não autorizado!'});
+        }
+
+        const data = await Post.create(request.all());
+        return response.created(data);
     }
 
     /**
@@ -63,22 +61,8 @@ class PostController {
      */
     async show({params, request, response, view}) {
         const data = await Post.findOrFail(params.id);
-        await data.load('images');
+        // await data.load('images');
         return data
-    }
-
-    /**
-     * Render a form to update an existing post.
-     * GET posts/:id/edit
-     *
-     * @param {object} ctx
-     * @param {Request} ctx.request
-     * @param {Response} ctx.response
-     * @param {View} ctx.view
-     */
-    async edit({params, request, response, view}) {
-        const post = await Post.findOrFail(params.id);
-        return { post: post.toJSON() };
     }
 
     /**
@@ -91,10 +75,13 @@ class PostController {
      */
     async update({params, request, response}) {
         const data = request.only(['titulo', 'descricao']);
-        const validation = await validateAll(data, {
+        const validation = await validate(data, {
             titulo: 'required',
             descricao: 'required',
         });
+        if (validation.fails()) {
+            return response.status(401).send({error: 'Não autorizado!'});
+        }
         const post = await Post.findOrFail(params.id);
         post.merge(data);
         await post.save();
@@ -111,10 +98,11 @@ class PostController {
     async destroy({params, request, response}) {
         const data = await Post.findOrFail(params.id);
         if (data.user_id !== auth.user.id) {
-            return response.status(401).send({ error: 'Não autorizado!' })
+            return response.status(401).send({error: 'Não autorizado!'})
         }
-        await data.delete()
+        await data.delete();
+        return response.status(200).send(params.id);
     }
 }
 
-module.exports = PostController
+module.exports = PostController;
