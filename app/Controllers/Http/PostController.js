@@ -20,10 +20,6 @@ class PostController {
      * @param {View} ctx.view
      */
     async index({request, response, view}) {
-        // return response.status(200).send({data: "teste"});
-
-
-
         let {page} = request.all();
         page = page ? page : 1;
         return await Post.query().with('user').paginate(page ? page : 1, 3);
@@ -64,7 +60,7 @@ class PostController {
      */
     async show({params, request, response, view}) {
         const data = await Post.findOrFail(params.id);
-        // await data.load('images');
+        await data.load('user');
         return data
     }
 
